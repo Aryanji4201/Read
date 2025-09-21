@@ -1,4 +1,4 @@
-# ACCURACY OPTIMIZED OMR SYSTEM - Version 2.0
+
 import streamlit as st
 import cv2
 import numpy as np
@@ -182,113 +182,7 @@ class AccurateOMRProcessor:
         return answers, avg_confidence
 
 
-    # def detect_bubbles(self, image):
-    #     """Enhanced bubble detection with row-based grouping and debug output"""
-    #     if len(image.shape) == 3:
-    #         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    #     else:
-    #         gray = image
-
-    #     thresh1 = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-    #             cv2.THRESH_BINARY_INV, 15, 8)
-    #     thresh2 = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
-    #     combined_thresh = cv2.bitwise_or(thresh1, thresh2)
-
-    #     contours, _ = cv2.findContours(combined_thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-    #     bubbles = []
-    #     for contour in contours:
-    #         area = cv2.contourArea(contour)
-    #         if not (self.area_range[0] <= area <= self.area_range[1]):
-    #             continue
-
-    #         perimeter = cv2.arcLength(contour, True)
-    #         if perimeter == 0:
-    #             continue
-
-    #         circularity = 4 * np.pi * area / (perimeter * perimeter)
-    #         if circularity < 0.08:
-    #             continue
-
-    #         x, y, w, h = cv2.boundingRect(contour)
-    #         aspect_ratio = w / float(h)
-    #         if abs(aspect_ratio - 1.0) > self.max_aspect_deviation:
-    #             continue
-
-    #         bubbles.append((x, y, w, h))
-
-    #     # Row-wise grouping with debug printing
-    #     row_tolerance = 22
-    #     rows = []
-    #     current_row = []
-
-    #     for bubble in sorted(bubbles, key=lambda b: b[1]):
-    #         center_y = bubble[1] + bubble[3] // 2
-    #         if not current_row or abs(center_y - (current_row[0][1] + current_row[0][3] // 2)) <= row_tolerance:
-    #             current_row.append(bubble)
-    #         else:
-    #             rows.append(sorted(current_row, key=lambda b:b[0]))
-    #             print(f"Detected row count: {len(current_row)} bubbles")  # Debug console print
-    #             current_row = [bubble]
-    #     if current_row:
-    #         rows.append(sorted(current_row, key=lambda b:b[0]))
-    #         print(f"Detected row count: {len(current_row)} bubbles")  # Debug console print
-
-    #     bubbles = [b for row in rows for b in row]
-
-    #     st.info(f"🎯 Detected {len(bubbles)} high-quality bubbles")
-    #     return bubbles
-
-    # def extract_answers_with_validation(self, image, bubbles):
-    #     """Answer extraction with full group validation and relaxed confidence threshold"""
-    #     if len(image.shape) == 3:
-    #         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    #     else:
-    #         gray = image
-
-    #     _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
-
-    #     answers = {}
-    #     confidence_scores = []
-
-    #     # Group bubbles in groups of 4 exactly
-    #     for i in range(0, len(bubbles) - 3, 4):
-    #         question_num = (i // 4) + 1
-    #         if question_num > 100:
-    #             break
-
-    #         group = bubbles[i:i+4]
-    #         if len(group) < 4:
-    #             print(f"Skipping question {question_num} due to incomplete bubble group")  # Debug print
-    #             continue
-
-    #         group = sorted(group, key=lambda b: b[0])
-    #         fills = []
-
-    #         for j, (x, y, w, h) in enumerate(group):
-    #             region = thresh[y:y+h, x:x+w]
-    #             if region.size > 0:
-    #                 fill_ratio = np.count_nonzero(region) / region.size
-    #                 fills.append((j, fill_ratio))
-
-    #         if fills:
-    #             fills.sort(key=lambda x: x[1], reverse=True)
-    #             max_idx, max_fill = fills[0]
-
-    #             # Relax confidence difference condition
-    #             if max_fill >= self.fill_threshold:
-    #                 answers[question_num] = chr(65 + max_idx)  # A, B, C, D
-    #                 confidence_scores.append(max_fill)
-    #             else:
-    #                 answers[question_num] = "BLANK"
-    #                 confidence_scores.append(0.0)
-
-    #     avg_confidence = np.mean(confidence_scores) if confidence_scores else 0.0
-    #     st.info(f"🎯 Extracted {len([a for a in answers.values() if a != 'BLANK'])} confident answers")
-    #     st.info(f"📊 Average confidence: {avg_confidence:.2f}")
-
-    #     return answers, avg_confidence
-
+    
 
     
     def calculate_scores_with_comparison(self, answers):
